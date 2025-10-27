@@ -21,14 +21,20 @@ pub fn main() !void {
     });
 
     while (true) {
-        uart.write_blocking("ON", uart_time.Duration.from_ms(200)) catch {
+        const msgOn = "ON\r\n";
+
+        // write_blocking takes 2 parameters. The second parameter is for a timeout.
+        // Skipping dealing with timeout for now
+        uart.write_blocking(msgOn, null) catch {
             uart.clear_errors();
         };
         time.sleep_ms(2000);
 
-        uart.write_blocking("OFF", uart_time.Duration.from_ms(200)) catch {
+        const msgOff = "OFF\n\r";
+        uart.write_blocking(msgOff, null) catch {
             uart.clear_errors();
         };
+
         time.sleep_ms(2000);
     }
 }
