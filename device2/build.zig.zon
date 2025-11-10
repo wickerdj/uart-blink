@@ -1,14 +1,14 @@
 .{
     .name = .uart_blink_device2,
     .version = "0.1.0",
-    .fingerprint = 0x63733c62f0c2975b,
-    .minimum_zig_version = "0.15.2",
     .dependencies = .{
         .microzig = .{
             .url = "https://github.com/ZigEmbeddedGroup/microzig/releases/download/0.15.0/microzig.tar.gz",
             .hash = "microzig-0.15.0-D20YSTUgCADpOaRtQ4SOk0HJ_E4342rgS9m3LQGhITbd",
         },
     },
+    .fingerprint = 0x63733c62f0c2975b,
+    .minimum_zig_version = "0.15.2",
     .paths = .{
         "build.zig",
         "build.zig.zon",
