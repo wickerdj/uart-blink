@@ -1,7 +1,7 @@
 .{
-    .name = .uart_blink_device1,
-    .version = "0.11.0",
-    .fingerprint = 0xfa7a6dd8e0c7569f,
+    .name = .uart_blink_device2,
+    .version = "0.1.0",
+    .fingerprint = 0x63733c62f0c2975b,
     .minimum_zig_version = "0.15.2",
     .dependencies = .{
         .microzig = .{
