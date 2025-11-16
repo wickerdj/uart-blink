@@ -1,18 +1,16 @@
 # Ignore everything
 *
 
-# Items that belong under source controlws
+# Items that belong under source controls
 !.gitignore
 !README.md
 
-!build.zig.zon
-!build.zig
+!device1/build.zig.zon
+!device1/build.zig
+!device1/src/
+!device1/src/**
+!device2/build.zig.zon
+!device2/build.zig
+!device2/src/
+!device2/src/**
 
-!.devcontainer/
-!.devcontainer/** 
-
-!.gdbinit
-!openocd-rp2040.cfg
-
-!src/
-!src/**
