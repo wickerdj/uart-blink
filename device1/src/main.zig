@@ -3,6 +3,7 @@ const microzig = @import("microzig");
 const time = rp2xxx.time;
 const uart_time = microzig.drivers.time;
 
+const led = gpio.num(25);
 const rp2xxx = microzig.hal;
 const gpio = rp2xxx.gpio;
 const clocks = rp2xxx.clocks;
@@ -16,6 +17,9 @@ pub fn main() !void {
         pin.set_function(.uart);
     }
 
+    led.set_function(.sio);
+    led.set_direction(.out);
+
     uart.apply(.{
         .clock_config = rp2xxx.clock_config,
     });
@@ -28,13 +32,14 @@ pub fn main() !void {
         uart.write_blocking(msgOn, null) catch {
             uart.clear_errors();
         };
-        time.sleep_ms(2000);
+        led.put(1);
+        time.sleep_ms(3000);
 
         const msgOff = "OFF\n\r";
         uart.write_blocking(msgOff, null) catch {
             uart.clear_errors();
         };
-
-        time.sleep_ms(2000);
+        led.put(0);
+        time.sleep_ms(1000);
     }
 }

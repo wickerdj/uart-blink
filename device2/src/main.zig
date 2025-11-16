@@ -1,6 +1,7 @@
 const std = @import("std");
 const microzig = @import("microzig");
 const uart_time = microzig.drivers.time;
+const time = rp2xxx.time;
 
 const rp2xxx = microzig.hal;
 const gpio = rp2xxx.gpio;
@@ -23,21 +24,30 @@ pub fn main() !void {
         .clock_config = rp2xxx.clock_config,
     });
 
-    var data: [1]u8 = .{0};
+    var buffer: [10]u8 = undefined;
+    var idx: usize = 0;
+
     while (true) {
-        // Read one byte, timeout disabled
+        var data: [1]u8 = .{0};
         uart.read_blocking(&data, null) catch {
-            // You need to clear UART errors before making a new transaction
             uart.clear_errors();
             continue;
         };
 
-        //tries to write one byte with 100ms timeout
-        uart.write_blocking(&data, uart_time.Duration.from_ms(100)) catch {
-            uart.clear_errors();
-        };
-        // Toggle the led every time we think we've received a character so we
-        // know something is going on.
-        led.toggle();
+        // Build up the message until we hit newline
+        if (data[0] == '\n' or data[0] == '\r') {
+            if (idx >= 2) {
+                // Check for ON or OFF
+                if (std.mem.eql(u8, buffer[0..idx], "ON")) {
+                    led.put(1);
+                } else if (std.mem.eql(u8, buffer[0..idx], "OFF")) {
+                    led.put(0);
+                }
+            }
+            idx = 0;
+        } else if (idx < buffer.len) {
+            buffer[idx] = data[0];
+            idx += 1;
+        }
     }
 }
