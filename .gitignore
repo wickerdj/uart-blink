@@ -4,6 +4,7 @@
 # Items that belong under source controls
 !.gitignore
 !README.md
+!AGENTS.md
 
 !device1/build.zig.zon
 !device1/build.zig
