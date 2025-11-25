@@ -12,10 +12,11 @@ const uart = rp2xxx.uart.instance.num(1);
 const uart_tx_pin = gpio.num(4);
 const uart_rx_pin = gpio.num(5);
 
-pub fn main() !void {
-    led.set_function(.sio);
-    led.set_direction(.out);
-    led.put(1);
+const BUFFER_SIZE = 10;
+const CMD_ON = "ON";
+const CMD_OFF = "OFF";
+
+fn setupUart() void {
     inline for (&.{ uart_tx_pin, uart_rx_pin }) |pin| {
         pin.set_function(.uart);
     }
@@ -23,8 +24,26 @@ pub fn main() !void {
     uart.apply(.{
         .clock_config = rp2xxx.clock_config,
     });
+}
 
-    var buffer: [10]u8 = undefined;
+fn setupLed() void {
+    led.set_function(.sio);
+    led.set_direction(.out);
+}
+
+fn processCommand(buffer: []const u8) void {
+    if (std.mem.eql(u8, buffer, CMD_ON)) {
+        led.put(1);
+    } else if (std.mem.eql(u8, buffer, CMD_OFF)) {
+        led.put(0);
+    }
+}
+
+pub fn main() !void {
+    setupUart();
+    setupLed();
+
+    var buffer: [BUFFER_SIZE]u8 = undefined;
     var idx: usize = 0;
 
     while (true) {
@@ -34,15 +53,9 @@ pub fn main() !void {
             continue;
         };
 
-        // Build up the message until we hit newline
         if (data[0] == '\n' or data[0] == '\r') {
             if (idx >= 2) {
-                // Check for ON or OFF
-                if (std.mem.eql(u8, buffer[0..idx], "ON")) {
-                    led.put(1);
-                } else if (std.mem.eql(u8, buffer[0..idx], "OFF")) {
-                    led.put(0);
-                }
+                processCommand(buffer[0..idx]);
             }
             idx = 0;
         } else if (idx < buffer.len) {
