@@ -2,39 +2,27 @@
 
 ## Purpose
 
-Learning project. Send a message from one PICO device to another PICO device over UART.
-The message should be a simple text of `ON` or `OFF`. There should be a delay between messages.
-The second PICO should receive the message and turn on or off the on-board LED.
+Learning project for UART communication between Raspberry Pi PICO devices using Zig and microzig. Device1 sends "ON"/"OFF" messages to Device2 which controls the onboard LED. A third PICO acts as debug probe.
 
-A third PICO is setup as a debug probe.
+## Hardware Setup
 
-This is a mixture of examples from the microzig examples
-
-- [blinky.zig](https://github.com/ZigEmbeddedGroup/microzig/blob/main/examples/raspberrypi/rp2xxx/src/blinky.zig)
-- [uart_log.zig](https://github.com/ZigEmbeddedGroup/microzig/blob/main/examples/raspberrypi/rp2xxx/src/uart_log.zig)
-- [uart_echo.zig](https://github.com/ZigEmbeddedGroup/microzig/blob/main/examples/raspberrypi/rp2xxx/src/uart_echo.zig)
+See AGENTS.md for detailed hardware setup, pin connections, and debugging guidance.
 
 ## Tech
 
 zig, microzig, Raspberry Pi PICO
 
-## Project structure
+## Project Structure
 
-Two zig projects.
+See AGENTS.md for detailed project structure, device responsibilities, and implementation details.
 
-### Device1
+## Examples
 
-This project sends the message and waits
+Based on microzig examples:
+- [blinky.zig](https://github.com/ZigEmbeddedGroup/microzig/blob/main/examples/raspberrypi/rp2xxx/src/blinky.zig)
+- [uart_log.zig](https://github.com/ZigEmbeddedGroup/microzig/blob/main/examples/raspberrypi/rp2xxx/src/uart_log.zig)
+- [uart_echo.zig](https://github.com/ZigEmbeddedGroup/microzig/blob/main/examples/raspberrypi/rp2xxx/src/uart_echo.zig)
 
-uart.write_block to send the message
-std.log.info to log a message
+## Development
 
-The debug probe is connected to physical pins 6&7.
-
-Note: tio is showing two messages. One from the write and other from log
-
-### Device 2
-
-This project receives the message and controls the LED
-
-uart.read_block to receive the message. The code is look for a specific phrase to action off of.
+For build commands, debugging tips, and code style guidelines, see AGENTS.md.
